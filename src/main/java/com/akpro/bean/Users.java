@@ -21,6 +21,9 @@ public class Users implements Serializable {
 	@Column(name="USER_ID")
 	private Integer id;
 	
+	@Column(name="USER_NAME")
+	private String userName;
+	
 	@Column(name="EMAIL")
 	private String email;
 	
@@ -65,6 +68,14 @@ public class Users implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getEmail() {

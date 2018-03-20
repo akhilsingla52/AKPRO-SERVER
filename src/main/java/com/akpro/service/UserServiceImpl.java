@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.akpro.bean.Users;
 import com.akpro.bo.UserDetailsBo;
 import com.akpro.repository.UsersRepository;
+import com.akpro.util.Constants;
+import com.akpro.util.DateUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
 			userDetailsBo.setEmail(user.getEmail());
 			userDetailsBo.setMobile(user.getMobile());
 			userDetailsBo.setRole(user.getRole());
+			userDetailsBo.setCreatedDate(DateUtils.getUTCDate(user.getTimeCreated(), Constants.DATE_FORMAT));
 			
 			userList.add(userDetailsBo);
 		}

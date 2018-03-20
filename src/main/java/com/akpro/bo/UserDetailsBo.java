@@ -14,6 +14,9 @@ public class UserDetailsBo {
 	private String mobile;
 	
 	private String role;
+	
+	@JsonProperty("created_date")
+	private String createdDate;
 
 	public Integer getUserId() {
 		return userId;
@@ -53,5 +56,13 @@ public class UserDetailsBo {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 }

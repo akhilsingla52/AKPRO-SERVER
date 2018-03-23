@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 	private UsersRepository usersRepository;
 
 	@Override
-	public List<UserDetailsBo> getUserList() {
+	public List<UserDetailsBo> getUserList() throws Exception {
 		List<UserDetailsBo> userList = new ArrayList<>();
 		
 		List<Users> users = usersRepository.findAll();

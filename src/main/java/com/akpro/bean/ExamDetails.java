@@ -30,9 +30,6 @@ public class ExamDetails implements Serializable {
 	@JoinColumn(name="CATEGORY_ID",nullable=false)
 	private QuestionCategory category;
 	
-	@Column(name="DATE")
-	private String date;
-	
 	@Column(name="QUESTION_ATTEMPT")
 	private Integer attempt;
 	
@@ -81,14 +78,6 @@ public class ExamDetails implements Serializable {
 
 	public void setCategory(QuestionCategory category) {
 		this.category = category;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 	public Integer getAttempt() {

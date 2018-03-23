@@ -38,6 +38,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-jersey')
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.apache.commons:commons-lang3:3.7')
+	compile('commons-codec:commons-codec:1.+')
 	runtime('mysql:mysql-connector-java')
 	
 	testCompile('org.springframework.boot:spring-boot-starter-test')

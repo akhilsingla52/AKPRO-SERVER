@@ -29,14 +29,8 @@ public class PersonalDetails implements Serializable {
 	@Column(name="NAME")
 	private String name;
 	
-	@Column(name="EMAIL")
-	private String email;
-	
 	@Column(name="DOB")
 	private String date;
-	
-	@Column(name="MOBILE")
-	private String mobile;
 	
 	@Column(name="GENDER")
 	private String gender;
@@ -100,28 +94,12 @@ public class PersonalDetails implements Serializable {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getDate() {
 		return date;
 	}
 
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
 	}
 
 	public String getGender() {

@@ -6,6 +6,6 @@ import com.akpro.bo.UserDetailsBo;
 
 public interface UserService {
 
-	public List<UserDetailsBo> getUserList();
+	public List<UserDetailsBo> getUserList() throws Exception;
 
 }

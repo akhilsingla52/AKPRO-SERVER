@@ -23,11 +23,11 @@ public class Company implements Serializable {
 	@Column(name="COMPANY_ID")
 	private Integer id;
 	
-	@Column(name="COMPANY_IMAGE")
-	private String image;
+	@Column(name="IMAGE_URL")
+	private String imageUrl;
 	
 	@Column(name="COMPANY_NAME")
-	private String company;
+	private String companyName;
 	
 	@Column(name="WEBSITE")
 	private String website;
@@ -60,20 +60,20 @@ public class Company implements Serializable {
 		this.id = id;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
-	public String getCompany() {
-		return company;
+	public String getCompanyName() {
+		return companyName;
 	}
 
-	public void setCompany(String company) {
-		this.company = company;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public String getWebsite() {

@@ -38,10 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
 			companyBo.setDescription(company.getDescription());
 			companyBo.setWebsite(company.getWebsite());
 			companyBo.setImageUrl(company.getImageUrl());
-			
-			File flie = new File(IMAGE_PATH + company.getImageUrl());
-			byte[] imageByte = Files.readAllBytes(flie.toPath());
-			companyBo.setImageData(Base64.encodeBase64String(imageByte));			
+			companyBo.setImageData(company.getImageUrl());			
 			
 			companyBo.setCreatedDate(DateUtils.getUTCDate(company.getTimeCreated(), DATE_FORMAT));
 			companyBo.setModifiedDate(DateUtils.getUTCDate(company.getTimeModified(), DATE_FORMAT));
@@ -63,9 +60,11 @@ public class CompanyServiceImpl implements CompanyService {
 			companyBo.setWebsite(company.getWebsite());
 			companyBo.setImageUrl(company.getImageUrl());
 			
-			File flie = new File(IMAGE_PATH + company.getImageUrl());
-			byte[] imageByte = Files.readAllBytes(flie.toPath());
-			companyBo.setImageData(Base64.encodeBase64String(imageByte));	
+			File file = new File(IMAGE_PATH + company.getImageUrl());
+			if(file!=null) {
+				byte[] imageByte = Files.readAllBytes(file.toPath());
+				companyBo.setImageData(Base64.encodeBase64String(imageByte));
+			}
 			
 			companyBo.setCreatedDate(DateUtils.getUTCDate(company.getTimeCreated(), DATE_FORMAT));
 			companyBo.setModifiedDate(DateUtils.getUTCDate(company.getTimeModified(), DATE_FORMAT));
@@ -84,9 +83,12 @@ public class CompanyServiceImpl implements CompanyService {
 			company = companyRepository.findById(companyBo.getId()).get();
 		
 		if(companyBo.getImageData()!=null && companyBo.getImageData()!=StringUtils.EMPTY) {
+			
+			if(company.getImageUrl()!=null && !StringUtils.equalsIgnoreCase(company.getImageUrl(), companyBo.getImageUrl()))
+				new File(IMAGE_PATH + company.getImageUrl()).delete();
+			
 			byte[] imageByte=Base64.decodeBase64(companyBo.getImageData());
-
-            FileOutputStream fos = new FileOutputStream(new File(IMAGE_PATH + company.getImageUrl()));
+            FileOutputStream fos = new FileOutputStream(new File(IMAGE_PATH + companyBo.getImageUrl()));
             fos.write(imageByte);
             fos.close();
 		}
@@ -100,6 +102,12 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 	
 	public void deleteCompanyById(Integer companyId) throws Exception {
-		companyRepository.deleteById(companyId);
+		Optional<Company> optionalCompany = companyRepository.findById(companyId);
+		Company company = optionalCompany.get();
+		
+		if(company.getImageUrl()!=null)
+			new File(IMAGE_PATH + company.getImageUrl()).delete();
+		
+		companyRepository.delete(company);
 	}
 }

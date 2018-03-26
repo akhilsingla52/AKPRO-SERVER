@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
 import com.akpro.bo.UserDetailsBo;
+import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.UserService;
 
 @RestController
@@ -24,9 +25,9 @@ public class UsersController {
 		try {
 			List<UserDetailsBo> userList = userService.getUserList();
 			
-			return new BaseResponse<List<UserDetailsBo>>(userList, "SUCCESS", HttpStatus.OK.value(), "Getting list of users");
+			return new BaseResponse<List<UserDetailsBo>>(userList, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting list of users");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get list : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get list : "+e.getMessage());
 		}
 	}
 	

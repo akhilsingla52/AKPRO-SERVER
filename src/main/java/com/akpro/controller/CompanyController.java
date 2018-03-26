@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
 import com.akpro.bo.CompanyBo;
+import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.CompanyService;
 
 @RestController
@@ -26,9 +27,9 @@ public class CompanyController {
 		try {
 			List<CompanyBo> companies = companyService.getAllCompanies();
 			
-			return new BaseResponse<List<CompanyBo>>(companies, "SUCCESS", HttpStatus.OK.value(), "Getting companies");
+			return new BaseResponse<List<CompanyBo>>(companies, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting companies");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get companies : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get companies : "+e.getMessage());
 		}
 	}
 	
@@ -37,9 +38,9 @@ public class CompanyController {
 		try {
 			CompanyBo company = companyService.getCompanyById(companyId);
 			
-			return new BaseResponse<CompanyBo>(company, "SUCCESS", HttpStatus.OK.value(), "Getting company");
+			return new BaseResponse<CompanyBo>(company, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting company");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get company : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get company : "+e.getMessage());
 		}
 	}
 	
@@ -48,9 +49,9 @@ public class CompanyController {
 		try {
 			companyService.createOrUpdateCompany(companyBo);
 			
-			return new BaseResponse<String>("SUCCESS", HttpStatus.OK.value(), "Company Added");
+			return new BaseResponse<String>(ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Company Added");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Added : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Added : "+e.getMessage());
 		}
 	}
 	
@@ -59,9 +60,9 @@ public class CompanyController {
 		try {
 			companyService.createOrUpdateCompany(companyBo);
 			
-			return new BaseResponse<String>("SUCCESS", HttpStatus.OK.value(), "Company Added");
+			return new BaseResponse<String>(ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Company Added");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Added : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Added : "+e.getMessage());
 		}
 	}
 	
@@ -70,9 +71,9 @@ public class CompanyController {
 		try {
 			companyService.deleteCompanyById(companyId);
 			
-			return new BaseResponse<String>("SUCCESS", HttpStatus.OK.value(), "Company Deleted");
+			return new BaseResponse<String>(ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Company Deleted");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not delete company : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not delete company : "+e.getMessage());
 		}
 	}
 

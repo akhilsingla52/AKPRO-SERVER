@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
 import com.akpro.bo.ExamDetailsBo;
+import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.ExamDetailsService;
 
 @RestController
@@ -24,9 +25,9 @@ public class ExamDetailsController {
 		try {
 			List<ExamDetailsBo> examDetails = examDetailsService.getExamDetails();
 			
-			return new BaseResponse<List<ExamDetailsBo>>(examDetails, "SUCCESS", HttpStatus.OK.value(), "Getting exam details");
+			return new BaseResponse<List<ExamDetailsBo>>(examDetails, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting exam details");
 		} catch(Exception e) {			
-			return new BaseResponse<String>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
 		}
 	}
 

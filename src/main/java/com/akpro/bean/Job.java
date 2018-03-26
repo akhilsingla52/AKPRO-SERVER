@@ -44,9 +44,6 @@ public class Job implements Serializable {
 	@Column(name="SALARY")
 	private Double salary;
 	
-	@Column(name="POST_TIME")
-	private Long postTime;
-	
 	@Column(name="TIME_CREATED")
 	private Long timeCreated;
 	
@@ -118,14 +115,6 @@ public class Job implements Serializable {
 
 	public void setSalary(Double salary) {
 		this.salary = salary;
-	}
-
-	public Long getPostTime() {
-		return postTime;
-	}
-
-	public void setPostTime(Long postTime) {
-		this.postTime = postTime;
 	}
 
 	public Long getTimeCreated() {

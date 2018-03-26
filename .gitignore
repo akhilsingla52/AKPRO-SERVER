@@ -29,3 +29,11 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+
+### Images ###
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.ico

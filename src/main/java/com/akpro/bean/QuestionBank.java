@@ -19,7 +19,7 @@ public class QuestionBank implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="QS_ID")
+	@Column(name="ID")
 	private Integer id;
 
 	@ManyToOne

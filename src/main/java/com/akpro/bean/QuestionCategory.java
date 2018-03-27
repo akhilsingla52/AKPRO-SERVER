@@ -18,7 +18,7 @@ import com.akpro.util.DateUtils;
 public class QuestionCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Column(name="CATEGORY_ID")
+	@Column(name="ID")
 	private Integer id;
 	
 	@Column(name="CATEGORY")

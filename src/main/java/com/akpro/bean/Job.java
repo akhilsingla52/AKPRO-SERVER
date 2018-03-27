@@ -22,7 +22,7 @@ public class Job implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="JOB_ID")
+	@Column(name="ID")
 	private Integer id;
 	
 	@ManyToOne(optional = false)

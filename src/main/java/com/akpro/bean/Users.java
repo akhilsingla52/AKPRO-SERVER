@@ -18,7 +18,7 @@ public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="USER_ID")
+	@Column(name="ID")
 	private Integer id;
 	
 	@Column(name="USER_NAME")

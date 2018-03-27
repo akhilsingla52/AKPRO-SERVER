@@ -33,7 +33,7 @@ public class CompanyController {
 		}
 	}
 	
-	@RequestMapping(value="/getCompanyById/{companyId}", method=RequestMethod.GET)
+	@RequestMapping(value="/{companyId}", method=RequestMethod.GET)
 	public BaseResponse<?> getCompanyById(@PathVariable("companyId") Integer companyId) {
 		try {
 			CompanyBo company = companyService.getCompanyById(companyId);
@@ -44,7 +44,7 @@ public class CompanyController {
 		}
 	}
 	
-	@RequestMapping(value="/createCompany", method=RequestMethod.POST)
+	@RequestMapping(value="/create", method=RequestMethod.POST)
 	public BaseResponse<?> createCompany(@RequestBody CompanyBo companyBo) {
 		try {
 			companyService.createOrUpdateCompany(companyBo);
@@ -55,18 +55,18 @@ public class CompanyController {
 		}
 	}
 	
-	@RequestMapping(value="/updateCompany", method=RequestMethod.PUT)
+	@RequestMapping(value="/update", method=RequestMethod.PUT)
 	public BaseResponse<?> updateCompany(@RequestBody CompanyBo companyBo) {
 		try {
 			companyService.createOrUpdateCompany(companyBo);
 			
-			return new BaseResponse<String>(ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Company Added");
+			return new BaseResponse<String>(ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Company Updated");
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Added : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Company Not Updated : "+e.getMessage());
 		}
 	}
 	
-	@RequestMapping(value="/deleteCompanyById/{companyId}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/delete/{companyId}", method=RequestMethod.DELETE)
 	public BaseResponse<?> deleteCompanyById(@PathVariable("companyId") Integer companyId) {
 		try {
 			companyService.deleteCompanyById(companyId);

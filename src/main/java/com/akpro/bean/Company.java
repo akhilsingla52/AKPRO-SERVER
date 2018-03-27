@@ -1,12 +1,15 @@
 package com.akpro.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -20,7 +23,7 @@ public class Company implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="COMPANY_ID")
+	@Column(name="ID")
 	private Integer id;
 	
 	@Column(name="IMAGE_URL")
@@ -40,6 +43,9 @@ public class Company implements Serializable {
 	
 	@Column(name="TIME_MODIFIED")
 	private Long timeModified;
+	
+	@OneToMany(mappedBy="company", cascade=CascadeType.ALL, orphanRemoval = true)
+	private List<Job> jobs;
 	
 	@PrePersist
 	public void prePersist() {
@@ -106,5 +112,13 @@ public class Company implements Serializable {
 
 	public void setTimeModified(Long timeModified) {
 		this.timeModified = timeModified;
+	}
+
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
 	}
 }

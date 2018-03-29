@@ -7,5 +7,5 @@ import com.akpro.bean.QuestionCategory;
 
 @Repository
 public interface QuestionCategoryRepository extends JpaRepository<QuestionCategory, Integer> {
-
+	
 }

@@ -20,7 +20,7 @@ public class ExamDetailsController {
 	@Autowired
 	private ExamDetailsService examDetailsService;
 	
-	@RequestMapping(value="/examDetails", method=RequestMethod.GET)
+	@RequestMapping(value="/getAll", method=RequestMethod.GET)
 	public BaseResponse<?> getExamDetails() {
 		try {
 			List<ExamDetailsBo> examDetails = examDetailsService.getExamDetails();

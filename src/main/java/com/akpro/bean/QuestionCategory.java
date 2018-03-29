@@ -3,8 +3,11 @@ package com.akpro.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -18,11 +21,12 @@ import com.akpro.util.DateUtils;
 public class QuestionCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ID")
 	private Integer id;
 	
-	@Column(name="CATEGORY")
-	private String category;
+	@Column(name="CATEGORY_NAME")
+	private String categoryName;
 	
 	@Column(name="TIME_CREATED")
 	private Long timeCreated;
@@ -30,7 +34,7 @@ public class QuestionCategory implements Serializable {
 	@Column(name="TIME_MODIFIED")
 	private Long timeModified;
 	
-	@OneToMany(mappedBy="category")
+	@OneToMany(mappedBy="category", cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<QuestionBank> questions;
 	
 	@PrePersist
@@ -51,13 +55,13 @@ public class QuestionCategory implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getCategory() {
-		return category;
+	
+	public String getCategoryName() {
+		return categoryName;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public Long getTimeCreated() {

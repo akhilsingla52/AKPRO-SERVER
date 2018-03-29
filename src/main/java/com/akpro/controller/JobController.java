@@ -23,8 +23,8 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 	
-	@RequestMapping(value="/allJobs", method=RequestMethod.GET)
-	public BaseResponse<?> getAllJobss() {
+	@RequestMapping(value="/getAll", method=RequestMethod.GET)
+	public BaseResponse<?> getAllJobs() {
 		try {
 			List<JobBo> jobs = jobService.getAllJobs();
 			

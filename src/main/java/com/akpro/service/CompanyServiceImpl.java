@@ -49,11 +49,13 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyBos;
 	}
 	
-	public CompanyBo getCompanyById(Integer companyId) throws Exception {		
-		Optional<Company> optionalCompany = companyRepository.findById(companyId);
-		Company company = optionalCompany.get();
+	public CompanyBo getCompanyById(Integer companyId) throws Exception {	
+		if(companyId==null || companyId==0)
+			throw new Exception("Id is null or 0");
+		CompanyBo companyBo = null;
+		Company company = companyRepository.findById(companyId).get();
 		if(company!=null) {
-			CompanyBo companyBo = new CompanyBo();
+			companyBo = new CompanyBo();
 			companyBo.setId(company.getId());
 			companyBo.setCompanyName(company.getCompanyName());
 			companyBo.setDescription(company.getDescription());
@@ -61,18 +63,16 @@ public class CompanyServiceImpl implements CompanyService {
 			companyBo.setImageUrl(company.getImageUrl());
 			
 			File file = new File(IMAGE_PATH + company.getImageUrl());
-			if(file!=null) {
+			if(file.exists()) {
 				byte[] imageByte = Files.readAllBytes(file.toPath());
 				companyBo.setImageData(Base64.encodeBase64String(imageByte));
 			}
 			
 			companyBo.setCreatedDate(DateUtils.getUTCDate(company.getTimeCreated(), DATE_FORMAT));
 			companyBo.setModifiedDate(DateUtils.getUTCDate(company.getTimeModified(), DATE_FORMAT));
-			
-			return companyBo;
 		}
 		
-		return null;
+		return companyBo;
 	}
 	
 	public void createOrUpdateCompany(CompanyBo companyBo) throws Exception {
@@ -84,8 +84,11 @@ public class CompanyServiceImpl implements CompanyService {
 		
 		if(companyBo.getImageData()!=null && companyBo.getImageData()!=StringUtils.EMPTY) {
 			
-			if(company.getImageUrl()!=null && !StringUtils.equalsIgnoreCase(company.getImageUrl(), companyBo.getImageUrl()))
-				new File(IMAGE_PATH + company.getImageUrl()).delete();
+			if(company.getImageUrl()!=null && !StringUtils.equalsIgnoreCase(company.getImageUrl(), companyBo.getImageUrl())) {
+				File file = new File(IMAGE_PATH + company.getImageUrl());
+				if(file.exists())
+					file.delete();
+			}
 			
 			byte[] imageByte=Base64.decodeBase64(companyBo.getImageData());
             FileOutputStream fos = new FileOutputStream(new File(IMAGE_PATH + companyBo.getImageUrl()));

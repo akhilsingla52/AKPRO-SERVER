@@ -20,7 +20,7 @@ public class UsersController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/userList", method=RequestMethod.GET)
+	@RequestMapping(value="/getAll", method=RequestMethod.GET)
 	public BaseResponse<?> getUserList() {
 		try {
 			List<UserDetailsBo> userList = userService.getUserList();

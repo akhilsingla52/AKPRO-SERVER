@@ -22,7 +22,7 @@ public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
 	
-	@RequestMapping(value="/allCompanies", method=RequestMethod.GET)
+	@RequestMapping(value="/getAll", method=RequestMethod.GET)
 	public BaseResponse<?> getAllCompanies() {
 		try {
 			List<CompanyBo> companies = companyService.getAllCompanies();

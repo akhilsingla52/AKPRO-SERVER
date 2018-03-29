@@ -2,7 +2,6 @@ package com.akpro.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,11 +49,13 @@ public class JobServiceImpl implements JobService {
 
 	
 	public JobBo getJobById(Integer jobId) throws Exception {
-		Optional<Job> optionalJob = jobRepository.findById(jobId);
-		Job job = optionalJob.get();
+		if(jobId==null || jobId==0)
+			throw new Exception("Id is null or 0");
+		JobBo jobBo = null;
+		Job job = jobRepository.findById(jobId).get();
 		
 		if(job!=null) {
-			JobBo jobBo = new JobBo();
+			jobBo = new JobBo();
 			jobBo.setId(job.getId());
 			jobBo.setCompanyId(job.getCompany().getId());
 			jobBo.setCompanyName(job.getCompany().getCompanyName());
@@ -65,10 +66,9 @@ public class JobServiceImpl implements JobService {
 			jobBo.setSalary(job.getSalary());
 			jobBo.setCreatedDate(DateUtils.getUTCDate(job.getTimeCreated(), Constants.DATE_FORMAT));
 			jobBo.setModifiedDate(DateUtils.getUTCDate(job.getTimeModified(), Constants.DATE_FORMAT));
-			return jobBo;
 		}
-		
-		return null;
+
+		return jobBo;
 	}
 
 	public void createOrUpdateJob(JobBo jobBo) throws Exception {

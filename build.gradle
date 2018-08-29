@@ -18,6 +18,8 @@ apply plugin: 'io.spring.dependency-management'
 
 apply plugin: 'war'
 
+group = 'com.akpro'
+
 war {
     baseName = 'akpro'
     version =  '1.0'

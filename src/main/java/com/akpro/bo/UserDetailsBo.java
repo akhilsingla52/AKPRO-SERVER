@@ -1,8 +1,12 @@
 package com.akpro.bo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserDetailsBo {
+public class UserDetailsBo implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@JsonProperty("user_id")
 	private Integer userId;
 

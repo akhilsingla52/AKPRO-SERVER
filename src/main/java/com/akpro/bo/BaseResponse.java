@@ -1,6 +1,10 @@
 package com.akpro.bo;
 
-public class BaseResponse<T> {
+import java.io.Serializable;
+
+public class BaseResponse<T> implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private String status;
 	
 	private Integer code;

@@ -1,8 +1,11 @@
 package com.akpro.bo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JobBo {
+public class JobBo implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	

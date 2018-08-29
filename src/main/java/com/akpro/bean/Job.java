@@ -26,7 +26,7 @@ public class Job implements Serializable {
 	private Integer id;
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(name="COMPANY_ID" )
+	@JoinColumn(name="COMPANY_ID")
 	private Company company;
 	
 	@Column(name="LOCATION")

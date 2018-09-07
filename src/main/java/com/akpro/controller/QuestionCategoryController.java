@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
 import com.akpro.bo.CategoryBo;
+import com.akpro.bo.CommonRS;
+import com.akpro.bo.ListRS;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.QuestionCategoryService;
 
@@ -21,25 +24,53 @@ public class QuestionCategoryController {
 	@Autowired
 	private QuestionCategoryService questionCategoryService;
 	
-	@RequestMapping(value="/getAll", method=RequestMethod.GET)
+	@RequestMapping(value="/getAllCategories", method=RequestMethod.GET)
 	public BaseResponse<?> getAllCategories() {
 		try {
-			List<CategoryBo> categories = questionCategoryService.getAllCategories();
+			List<CategoryBo> categoryBos = questionCategoryService.getAllCategories(); 
+			ListRS<CategoryBo> listRs = new ListRS<>();
+			listRs.setData(categoryBos);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting Categories for questions");
 			
-			return new BaseResponse<List<CategoryBo>>(categories, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting Categories");
+			return listRs;
+		} catch(Exception e) {			
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Categories : "+e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value="/getAllCategoriesWithParams", method=RequestMethod.GET)
+	public BaseResponse<?> getAllCategoriesWithParams(@RequestParam(name="page", defaultValue="1") Integer page,
+											@RequestParam(name="size", defaultValue="5") Integer size,
+											@RequestParam(name="sortorder", defaultValue="ASC") String sortingDirection,
+											@RequestParam(name="sortby", defaultValue="id") String sortBy,
+											@RequestParam(name="search", defaultValue="") String search) {
+		try {
+			ListRS<CategoryBo> listRs = questionCategoryService.getAllCategoriesWithParams(page, size, sortingDirection, sortBy, search);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting Categories");
+			
+			return listRs;
 		} catch(Exception e) {			
 			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Categories : "+e.getMessage());
 		}
 	}
 	
 	@RequestMapping(value="/{categoryId}", method=RequestMethod.GET)
-	public BaseResponse<?> getCategoryById(@PathVariable("categoryId") Integer categoryId) {
+	public CommonRS<?> getCategoryById(@PathVariable("categoryId") Integer categoryId) {
 		try {
 			CategoryBo category = questionCategoryService.getCategoryById(categoryId);
+			CommonRS<CategoryBo> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting Category");
+			commonRS.setData(category);
 			
-			return new BaseResponse<CategoryBo>(category, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting Category");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Category : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Category : "+e.getMessage());
 		}
 	}
 	

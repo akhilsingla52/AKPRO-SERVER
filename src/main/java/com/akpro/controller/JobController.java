@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CommonRS;
 import com.akpro.bo.JobBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.JobService;
@@ -24,24 +25,35 @@ public class JobController {
 	private JobService jobService;
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public BaseResponse<?> getAllJobs() {
+	public CommonRS<?> getAllJobs() {
 		try {
 			List<JobBo> jobs = jobService.getAllJobs();
+			CommonRS<List<JobBo>> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting Jobs");
+			commonRS.setData(jobs);
 			
-			return new BaseResponse<List<JobBo>>(jobs, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting Jobs");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Jobs : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Jobs : "+e.getMessage());
 		}
 	}
 	
 	@RequestMapping(value="/{jobId}", method=RequestMethod.GET)
-	public BaseResponse<?> getJobById(@PathVariable("jobId") Integer jobId) {
+	public CommonRS<?> getJobById(@PathVariable("jobId") Integer jobId) {
 		try {
 			JobBo jobBo = jobService.getJobById(jobId);
+			CommonRS<JobBo> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting Job");
+			commonRS.setData(jobBo);
 			
-			return new BaseResponse<JobBo>(jobBo, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting Job");
+			
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Job : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Job : "+e.getMessage());
 		}
 	}
 	

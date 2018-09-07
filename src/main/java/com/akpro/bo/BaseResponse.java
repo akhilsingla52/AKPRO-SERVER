@@ -7,39 +7,18 @@ public class BaseResponse<T> implements Serializable {
 
 	private String status;
 	
-	private Integer code;
+	private Integer statusCode;
 	
 	private String message;
 	
-	private T data;
+	private String developerMessage;
 	
 	public BaseResponse() {
 	}
 
-	public BaseResponse(String status) {
+	public BaseResponse(String status, Integer statusCode, String message) {
 		this.status = status;
-	}
-
-	public BaseResponse(String status, Integer code) {
-		this.status = status;
-		this.code = code;
-	}
-
-	public BaseResponse(T data, String message) {
-		this.data = data;
-		this.message = message;
-	}
-
-	public BaseResponse(String status, Integer code, String message) {
-		this.status = status;
-		this.code = code;
-		this.message = message;
-	}
-
-	public BaseResponse(T data, String status, Integer code, String message) {
-		this.data = data;
-		this.status = status;
-		this.code = code;
+		this.statusCode = statusCode;
 		this.message = message;
 	}
 
@@ -51,12 +30,12 @@ public class BaseResponse<T> implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getCode() {
-		return code;
+	public Integer getStatusCode() {
+		return statusCode;
 	}
 
-	public void setCode(Integer code) {
-		this.code = code;
+	public void setStatusCode(Integer statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	public String getMessage() {
@@ -67,11 +46,11 @@ public class BaseResponse<T> implements Serializable {
 		this.message = message;
 	}
 
-	public T getData() {
-		return data;
+	public String getDeveloperMessage() {
+		return developerMessage;
 	}
 
-	public void setData(T data) {
-		this.data = data;
+	public void setDeveloperMessage(String developerMessage) {
+		this.developerMessage = developerMessage;
 	}
 }

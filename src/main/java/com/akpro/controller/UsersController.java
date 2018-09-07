@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CommonRS;
 import com.akpro.bo.UserDetailsBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.UserService;
@@ -21,13 +21,18 @@ public class UsersController {
 	private UserService userService;
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public BaseResponse<?> getUserList() {
+	public CommonRS<?> getUserList() {
 		try {
 			List<UserDetailsBo> userList = userService.getUserList();
+			CommonRS<List<UserDetailsBo>> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting list of users");
+			commonRS.setData(userList);
 			
-			return new BaseResponse<List<UserDetailsBo>>(userList, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting list of users");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get list : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get list : "+e.getMessage());
 		}
 	}
 	

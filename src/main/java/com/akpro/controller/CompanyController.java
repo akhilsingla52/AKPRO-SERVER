@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CommonRS;
 import com.akpro.bo.CompanyBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.CompanyService;
@@ -23,24 +24,34 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public BaseResponse<?> getAllCompanies() {
+	public CommonRS<?> getAllCompanies() {
 		try {
 			List<CompanyBo> companies = companyService.getAllCompanies();
+			CommonRS<List<CompanyBo>> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting companies");
+			commonRS.setData(companies);
 			
-			return new BaseResponse<List<CompanyBo>>(companies, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting companies");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get companies : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get companies : "+e.getMessage());
 		}
 	}
 	
 	@RequestMapping(value="/{companyId}", method=RequestMethod.GET)
-	public BaseResponse<?> getCompanyById(@PathVariable("companyId") Integer companyId) {
+	public CommonRS<?> getCompanyById(@PathVariable("companyId") Integer companyId) {
 		try {
 			CompanyBo company = companyService.getCompanyById(companyId);
+			CommonRS<CompanyBo> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting company");
+			commonRS.setData(company);
 			
-			return new BaseResponse<CompanyBo>(company, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting company");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get company : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get company : "+e.getMessage());
 		}
 	}
 	

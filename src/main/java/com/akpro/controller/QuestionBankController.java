@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CommonRS;
 import com.akpro.bo.QuestionBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.QuestionBankService;
@@ -23,24 +24,34 @@ public class QuestionBankController {
 	private QuestionBankService questionBankService;
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public BaseResponse<?> getAllQuestions() {
+	public CommonRS<?> getAllQuestions() {
 		try {
 			List<QuestionBo> questions = questionBankService.getAllQuestions();
+			CommonRS<List<QuestionBo>> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting questions");
+			commonRS.setData(questions);
 			
-			return new BaseResponse<List<QuestionBo>>(questions, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting questions");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get questions : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get questions : "+e.getMessage());
 		}
 	}
 	
 	@RequestMapping(value="/{questionId}", method=RequestMethod.GET)
-	public BaseResponse<?> getQuestionById(@PathVariable("questionId") Integer questionId) {
+	public CommonRS<?> getQuestionById(@PathVariable("questionId") Integer questionId) {
 		try {
 			QuestionBo question = questionBankService.getQuestionById(questionId);
+			CommonRS<QuestionBo> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting question");
+			commonRS.setData(question);
 			
-			return new BaseResponse<QuestionBo>(question, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting question");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get question : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get question : "+e.getMessage());
 		}
 	}
 	

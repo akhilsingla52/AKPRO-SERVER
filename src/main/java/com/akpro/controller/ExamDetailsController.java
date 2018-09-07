@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CommonRS;
 import com.akpro.bo.ExamDetailsBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.ExamDetailsService;
@@ -21,13 +21,18 @@ public class ExamDetailsController {
 	private ExamDetailsService examDetailsService;
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public BaseResponse<?> getExamDetails() {
+	public CommonRS<?> getExamDetails() {
 		try {
 			List<ExamDetailsBo> examDetails = examDetailsService.getExamDetails();
+			CommonRS<List<ExamDetailsBo>> commonRS = new CommonRS<>();
+			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			commonRS.setStatusCode(HttpStatus.OK.value());
+			commonRS.setMessage("Getting exam details");
+			commonRS.setData(examDetails);
 			
-			return new BaseResponse<List<ExamDetailsBo>>(examDetails, ResponseStatusEnum.SUCCESS.getDescription(), HttpStatus.OK.value(), "Getting exam details");
+			return commonRS;
 		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
+			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.akpro.service;
 
+import static com.akpro.util.Constants.DATE_FORMAT;
 import static com.akpro.util.Constants.IMAGE_PATH;
 
 import java.io.File;
@@ -10,25 +11,70 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.akpro.bean.Company;
 import com.akpro.bo.CompanyBo;
+import com.akpro.bo.ListRS;
 import com.akpro.repository.CompanyRepository;
 import com.akpro.util.DateUtils;
-import static com.akpro.util.Constants.*;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
+	
 	@Autowired
 	private CompanyRepository companyRepository;
 	
+	public ListRS<CompanyBo> getAllCompanies(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception {
+		List<CompanyBo> companyBos = new ArrayList<>();
+		search = "%"+new String(Hex.decodeHex(search), "UTF-8")+"%";
+		LOGGER.info("Search: "+search);
+		
+		Direction direction;
+		if (sortingDirection.equals("ASC")) {
+			direction = Sort.Direction.ASC;
+		} else {
+			direction = Sort.Direction.DESC;
+		}
+		
+		Page<Company> companies = companyRepository.findBySearch(search, PageRequest.of(page-1, size, direction, sortBy));
+		
+		for(Company company:companies) {
+			CompanyBo companyBo = new CompanyBo();
+			companyBo.setId(company.getId());
+			companyBo.setCompanyName(company.getCompanyName());
+			companyBo.setDescription(company.getDescription());
+			companyBo.setWebsite(company.getWebsite());
+			companyBo.setImageUrl(company.getImageUrl());
+			companyBo.setImageData(company.getImageUrl());			
+			
+			companyBo.setCreatedDate(DateUtils.getUTCDate(company.getTimeCreated(), DATE_FORMAT));
+			companyBo.setModifiedDate(DateUtils.getUTCDate(company.getTimeModified(), DATE_FORMAT));
+			
+			companyBos.add(companyBo);
+		}
+		
+		ListRS<CompanyBo> listRs = new ListRS<>();
+		listRs.setData(companyBos);
+		listRs.setCount(companies.getTotalElements());
+		listRs.setPageCount(companies.getTotalPages());
+		
+		return listRs;
+	}
+	
 	public List<CompanyBo> getAllCompanies() throws Exception {
 		List<CompanyBo> companyBos = new ArrayList<>();
-		
 		List<Company> companies = companyRepository.findAll();
 		
 		for(Company company:companies) {

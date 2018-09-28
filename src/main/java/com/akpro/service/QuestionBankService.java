@@ -1,12 +1,11 @@
 package com.akpro.service;
 
-import java.util.List;
-
+import com.akpro.bo.ListRS;
 import com.akpro.bo.QuestionBo;
 
 public interface QuestionBankService {
 
-	public List<QuestionBo> getAllQuestions() throws Exception;
+	public ListRS<QuestionBo> getAllQuestions(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception;
 
 	public QuestionBo getQuestionById(Integer questionId) throws Exception;
 

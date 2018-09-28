@@ -8,35 +8,60 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
 import com.akpro.bo.CommonRS;
+import com.akpro.bo.CompanyBo;
 import com.akpro.bo.JobBo;
+import com.akpro.bo.ListRS;
 import com.akpro.enums.ResponseStatusEnum;
+import com.akpro.service.CompanyService;
 import com.akpro.service.JobService;
 
 @RestController
 @RequestMapping("job")
 public class JobController {
-
 	
 	@Autowired
 	private JobService jobService;
 	
-	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public CommonRS<?> getAllJobs() {
+	@Autowired
+	private CompanyService companyService;
+
+	@RequestMapping(value="/getAllJobs", method=RequestMethod.GET)
+	public BaseResponse<?> getAllJobs(@RequestParam(name="page", defaultValue="1") Integer page,
+									@RequestParam(name="size", defaultValue="5") Integer size,
+									@RequestParam(name="sortorder", defaultValue="ASC") String sortingDirection,
+									@RequestParam(name="sortby", defaultValue="id") String sortBy,
+									@RequestParam(name="search", defaultValue="") String search) {
 		try {
-			List<JobBo> jobs = jobService.getAllJobs();
-			CommonRS<List<JobBo>> commonRS = new CommonRS<>();
-			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
-			commonRS.setStatusCode(HttpStatus.OK.value());
-			commonRS.setMessage("Getting Jobs");
-			commonRS.setData(jobs);
+			ListRS<JobBo> listRs = jobService.getAllJobs(page, size, sortingDirection, sortBy, search);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting Jobs");
 			
-			return commonRS;
+			return listRs;
 		} catch(Exception e) {			
-			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Jobs : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Jobs : "+e.getMessage());
+		}
+	}
+
+	@RequestMapping(value="/getAllCompanies", method=RequestMethod.GET)
+	public BaseResponse<?> getAllCompanies() {
+		try {
+			List<CompanyBo> companyBos = companyService.getAllCompanies();
+			
+			ListRS<CompanyBo> listRs = new ListRS<>();
+			listRs.setData(companyBos);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting companies");
+			
+			return listRs;
+		} catch(Exception e) {			
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get companies : "+e.getMessage());
 		}
 	}
 	

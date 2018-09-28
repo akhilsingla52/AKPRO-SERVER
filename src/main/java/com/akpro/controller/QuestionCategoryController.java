@@ -1,7 +1,5 @@
 package com.akpro.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +23,13 @@ public class QuestionCategoryController {
 	private QuestionCategoryService questionCategoryService;
 	
 	@RequestMapping(value="/getAllCategories", method=RequestMethod.GET)
-	public BaseResponse<?> getAllCategories() {
-		try {
-			List<CategoryBo> categoryBos = questionCategoryService.getAllCategories(); 
-			ListRS<CategoryBo> listRs = new ListRS<>();
-			listRs.setData(categoryBos);
-			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
-			listRs.setStatusCode(HttpStatus.OK.value());
-			listRs.setMessage("Getting Categories for questions");
-			
-			return listRs;
-		} catch(Exception e) {			
-			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Categories : "+e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value="/getAllCategoriesWithParams", method=RequestMethod.GET)
-	public BaseResponse<?> getAllCategoriesWithParams(@RequestParam(name="page", defaultValue="1") Integer page,
+	public BaseResponse<?> getAllCategories(@RequestParam(name="page", defaultValue="1") Integer page,
 											@RequestParam(name="size", defaultValue="5") Integer size,
 											@RequestParam(name="sortorder", defaultValue="ASC") String sortingDirection,
 											@RequestParam(name="sortby", defaultValue="id") String sortBy,
 											@RequestParam(name="search", defaultValue="") String search) {
 		try {
-			ListRS<CategoryBo> listRs = questionCategoryService.getAllCategoriesWithParams(page, size, sortingDirection, sortBy, search);
+			ListRS<CategoryBo> listRs = questionCategoryService.getAllCategories(page, size, sortingDirection, sortBy, search);
 			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
 			listRs.setStatusCode(HttpStatus.OK.value());
 			listRs.setMessage("Getting Categories");

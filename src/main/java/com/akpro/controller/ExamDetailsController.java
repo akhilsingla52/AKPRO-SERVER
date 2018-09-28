@@ -1,15 +1,15 @@
 package com.akpro.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.akpro.bo.CommonRS;
+import com.akpro.bo.BaseResponse;
 import com.akpro.bo.ExamDetailsBo;
+import com.akpro.bo.ListRS;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.ExamDetailsService;
 
@@ -20,19 +20,21 @@ public class ExamDetailsController {
 	@Autowired
 	private ExamDetailsService examDetailsService;
 	
-	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public CommonRS<?> getExamDetails() {
+	@RequestMapping(value="/getAllExamDetails", method=RequestMethod.GET)
+	public BaseResponse<?> getAllExamDetails(@RequestParam(name="page", defaultValue="1") Integer page,
+									@RequestParam(name="size", defaultValue="5") Integer size,
+									@RequestParam(name="sortorder", defaultValue="ASC") String sortingDirection,
+									@RequestParam(name="sortby", defaultValue="id") String sortBy,
+									@RequestParam(name="search", defaultValue="") String search) {
 		try {
-			List<ExamDetailsBo> examDetails = examDetailsService.getExamDetails();
-			CommonRS<List<ExamDetailsBo>> commonRS = new CommonRS<>();
-			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
-			commonRS.setStatusCode(HttpStatus.OK.value());
-			commonRS.setMessage("Getting exam details");
-			commonRS.setData(examDetails);
+			ListRS<ExamDetailsBo> listRs = examDetailsService.getAllExamDetails(page, size, sortingDirection, sortBy, search);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting exam details");
 			
-			return commonRS;
+			return listRs;
 		} catch(Exception e) {			
-			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get exam details : "+e.getMessage());
 		}
 	}
 

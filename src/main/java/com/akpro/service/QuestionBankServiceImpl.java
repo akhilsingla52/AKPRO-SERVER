@@ -6,11 +6,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.akpro.bean.QuestionBank;
+import com.akpro.bo.ListRS;
 import com.akpro.bo.QuestionBo;
 import com.akpro.repository.QuestionBankRepository;
 import com.akpro.repository.QuestionCategoryRepository;
@@ -19,16 +27,27 @@ import com.akpro.util.DateUtils;
 @Service
 public class QuestionBankServiceImpl implements QuestionBankService {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(QuestionBankServiceImpl.class);
+	
 	@Autowired
 	private QuestionBankRepository questionBankRepository;
 
 	@Autowired
 	private QuestionCategoryRepository questionCategoryRepository;
-
-	public List<QuestionBo> getAllQuestions() throws Exception {
+	
+	public ListRS<QuestionBo> getAllQuestions(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception {
 		List<QuestionBo> questionBos = new ArrayList<>();
+		search = "%"+new String(Hex.decodeHex(search), "UTF-8")+"%";
+		LOGGER.info("Search: "+search);
 		
-		List<QuestionBank> questions = questionBankRepository.findAll();
+		Direction direction;
+		if (sortingDirection.equals("ASC")) {
+			direction = Sort.Direction.ASC;
+		} else {
+			direction = Sort.Direction.DESC;
+		}
+		
+		Page<QuestionBank> questions = questionBankRepository.findBySearch(search, PageRequest.of(page-1, size, direction, sortBy));
 		
 		for(QuestionBank question: questions) {
 			QuestionBo questionBo = new QuestionBo();
@@ -44,7 +63,12 @@ public class QuestionBankServiceImpl implements QuestionBankService {
 			questionBos.add(questionBo);
 		}
 		
-		return questionBos;
+		ListRS<QuestionBo> listRs = new ListRS<>();
+		listRs.setData(questionBos);
+		listRs.setCount(questions.getTotalElements());
+		listRs.setPageCount(questions.getTotalPages());
+		
+		return listRs;
 	}
 
 	public QuestionBo getQuestionById(Integer questionId) throws Exception {

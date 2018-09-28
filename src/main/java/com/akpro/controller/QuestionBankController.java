@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akpro.bo.BaseResponse;
+import com.akpro.bo.CategoryBo;
 import com.akpro.bo.CommonRS;
+import com.akpro.bo.ListRS;
 import com.akpro.bo.QuestionBo;
 import com.akpro.enums.ResponseStatusEnum;
 import com.akpro.service.QuestionBankService;
+import com.akpro.service.QuestionCategoryService;
 
 @RestController
 @RequestMapping("questionBank")
@@ -23,19 +27,40 @@ public class QuestionBankController {
 	@Autowired
 	private QuestionBankService questionBankService;
 	
-	@RequestMapping(value="/getAll", method=RequestMethod.GET)
-	public CommonRS<?> getAllQuestions() {
+	@Autowired
+	private QuestionCategoryService questionCategoryService;
+	
+	@RequestMapping(value="/getAllQuestions", method=RequestMethod.GET)
+	public BaseResponse<?> getAllQuestions(@RequestParam(name="page", defaultValue="1") Integer page,
+									@RequestParam(name="size", defaultValue="5") Integer size,
+									@RequestParam(name="sortorder", defaultValue="ASC") String sortingDirection,
+									@RequestParam(name="sortby", defaultValue="id") String sortBy,
+									@RequestParam(name="search", defaultValue="") String search) {
 		try {
-			List<QuestionBo> questions = questionBankService.getAllQuestions();
-			CommonRS<List<QuestionBo>> commonRS = new CommonRS<>();
-			commonRS.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
-			commonRS.setStatusCode(HttpStatus.OK.value());
-			commonRS.setMessage("Getting questions");
-			commonRS.setData(questions);
+			ListRS<QuestionBo> listRs = questionBankService.getAllQuestions(page, size, sortingDirection, sortBy, search);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting questions");
 			
-			return commonRS;
+			return listRs;
 		} catch(Exception e) {			
-			return new CommonRS<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get questions : "+e.getMessage());
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get questions : "+e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value="/getAllCategories", method=RequestMethod.GET)
+	public BaseResponse<?> getAllCategories() {
+		try {
+			List<CategoryBo> categoryBos = questionCategoryService.getAllCategories(); 
+			ListRS<CategoryBo> listRs = new ListRS<>();
+			listRs.setData(categoryBos);
+			listRs.setStatus(ResponseStatusEnum.SUCCESS.getDescription());
+			listRs.setStatusCode(HttpStatus.OK.value());
+			listRs.setMessage("Getting Categories for questions");
+			
+			return listRs;
+		} catch(Exception e) {			
+			return new BaseResponse<String>(ResponseStatusEnum.ERROR.getDescription(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not get Categories : "+e.getMessage());
 		}
 	}
 	

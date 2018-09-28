@@ -3,11 +3,19 @@ package com.akpro.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.akpro.bean.Job;
 import com.akpro.bo.JobBo;
+import com.akpro.bo.ListRS;
 import com.akpro.repository.CompanyRepository;
 import com.akpro.repository.JobRepository;
 import com.akpro.util.Constants;
@@ -16,17 +24,27 @@ import com.akpro.util.DateUtils;
 @Service
 public class JobServiceImpl implements JobService {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceImpl.class);
+	
 	@Autowired
 	private JobRepository jobRepository;
 	
 	@Autowired
 	private CompanyRepository companyRepository;
-
-	@Override
-	public List<JobBo> getAllJobs() throws Exception {
+	
+	public ListRS<JobBo> getAllJobs(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception {
 		List<JobBo> jobBos = new ArrayList<>();
+		search = "%"+new String(Hex.decodeHex(search), "UTF-8")+"%";
+		LOGGER.info("Search: "+search);
 		
-		List<Job> jobs = jobRepository.findAll();
+		Direction direction;
+		if (sortingDirection.equals("ASC")) {
+			direction = Sort.Direction.ASC;
+		} else {
+			direction = Sort.Direction.DESC;
+		}
+		
+		Page<Job> jobs = jobRepository.findBySearch(search, PageRequest.of(page-1, size, direction, sortBy));
 		
 		for(Job job: jobs) {
 			JobBo jobBo = new JobBo();
@@ -44,9 +62,13 @@ public class JobServiceImpl implements JobService {
 			jobBos.add(jobBo);
 		}
 		
-		return jobBos;
+		ListRS<JobBo> listRs = new ListRS<>();
+		listRs.setData(jobBos);
+		listRs.setCount(jobs.getTotalElements());
+		listRs.setPageCount(jobs.getTotalPages());
+		
+		return listRs;
 	}
-
 	
 	public JobBo getJobById(Integer jobId) throws Exception {
 		if(jobId==null || jobId==0)

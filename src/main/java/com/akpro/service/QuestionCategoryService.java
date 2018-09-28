@@ -9,7 +9,7 @@ public interface QuestionCategoryService {
 
 	public List<CategoryBo> getAllCategories() throws Exception;
 
-	public ListRS<CategoryBo> getAllCategoriesWithParams(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception;
+	public ListRS<CategoryBo> getAllCategories(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception;
 
 	public CategoryBo getCategoryById(Integer categoryId) throws Exception;
 

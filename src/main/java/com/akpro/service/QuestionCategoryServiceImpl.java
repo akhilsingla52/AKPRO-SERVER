@@ -42,7 +42,7 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
 		return categoryBos;
 	}
 	
-	public ListRS<CategoryBo> getAllCategoriesWithParams(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception {
+	public ListRS<CategoryBo> getAllCategories(Integer page, Integer size, String sortingDirection, String sortBy, String search) throws Exception {
 		List<CategoryBo> categoryBos = new ArrayList<>();
 		search = "%"+new String(Hex.decodeHex(search), "UTF-8")+"%";
 		Direction direction;

@@ -8,7 +8,7 @@ public class UserDetailsBo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@JsonProperty("user_id")
-	private Integer userId;
+	private Long userId;
 
 	@JsonProperty("user_name")
 	private String userName;
@@ -19,14 +19,16 @@ public class UserDetailsBo implements Serializable {
 	
 	private String role;
 	
+	private String password;
+	
 	@JsonProperty("created_date")
 	private String createdDate;
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -60,6 +62,14 @@ public class UserDetailsBo implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getCreatedDate() {

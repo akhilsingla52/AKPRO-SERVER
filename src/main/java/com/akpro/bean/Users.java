@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -18,13 +20,14 @@ public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ID")
-	private Integer id;
+	private Long id;
 	
-	@Column(name="USER_NAME")
+	@Column(name="USER_NAME", unique=true)
 	private String userName;
 	
-	@Column(name="EMAIL")
+	@Column(name="EMAIL", unique=true)
 	private String email;
 	
 	@Column(name="MOBILE")
@@ -41,6 +44,12 @@ public class Users implements Serializable {
 	
 	@Column(name="TIME_MODIFIED")
 	private Long timeModified;
+	
+	@Column(name="LAST_LOGIN")
+	private Long lastLogin;
+	
+	@Column(name="TOKEN")
+	private String token;
 	
 	@OneToOne(mappedBy="user")
 	private PersonalDetails personalDetails;
@@ -62,11 +71,11 @@ public class Users implements Serializable {
 		this.setTimeModified(DateUtils.getCurrentDateAndTimeInUTCTimeZone());
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -124,6 +133,22 @@ public class Users implements Serializable {
 
 	public void setTimeModified(Long timeModified) {
 		this.timeModified = timeModified;
+	}
+
+	public Long getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Long lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public PersonalDetails getPersonalDetails() {

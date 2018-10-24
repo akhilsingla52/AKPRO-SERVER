@@ -5,7 +5,7 @@ package com.akpro.enums;
  * 
  */
 public enum UserRoleEnum {
-	ADMIN(1, "Admin"), USER(2, "USER");
+	ADMIN(1, "ADMIN"), PARTNER(2, "PARTNER");
 
 	private int userCode;
 	private String userDescription;
